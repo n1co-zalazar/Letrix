@@ -200,8 +200,69 @@ def jugar_sopa_letras(palabras=None, filas=7, columnas=7, tam_celda=65):
         screen.blit(texto_menu, (boton_menu.centerx - texto_menu.get_width() // 2,
                                  boton_menu.centery - texto_menu.get_height() // 2))
 
+        # Botón Reglas
+        boton_reglas = pygame.Rect(12, length - 430, 170, 45)
+        hover_reglas = boton_reglas.collidepoint(mouse_pos)
+        color_reglas = (200, 200, 200) if hover_reglas else blanco
+        pygame.draw.rect(screen, color_reglas, boton_reglas)
+        pygame.draw.rect(screen, negro, boton_reglas, 2)
+
+        texto_reglas = fuente.render("Reglas", True, negro)
+        screen.blit(texto_reglas, (boton_reglas.centerx - texto_reglas.get_width() // 2,
+                                   boton_reglas.centery - texto_reglas.get_height() // 2))
+
         pygame.display.flip()
-        return boton_resolver, boton_menu
+        return boton_resolver, boton_menu,boton_reglas
+
+    def mostrar_reglas():
+        reglas_fondo = pygame.Surface((width, length))
+        reglas_fondo.fill(negro)
+        fuente = pygame.font.Font('letras/letraproyecto.ttf', 20)
+        fuente2 = pygame.font.Font('letras/letraproyecto.ttf', 20)
+        instruccionesventana = [
+            "---------------------------------------------------------------------------",
+            "                      REGLAS DEL JUEGO LETRAS                              "
+            ,"---------------------------------------------------------------------------"
+            "- Encuentra palabras seleccionando letras contiguas",
+            "- Puedes usar cada letra en múltiples palabras",
+            "- No se permiten diagonales",
+            "-----------------------------ATENCIÓN---------------------------------------",
+            "No todas las palabras formadas serán válidas",
+            "Solo cuentan las palabras propuestas"
+
+        ]
+
+
+
+        boton_cerrar = pygame.Rect(width // 2 - 80, length - 100, 160, 50)
+        esperando = True
+        while esperando:
+            screen.blit(reglas_fondo, (0, 0))
+            y = 30
+            for linea in instruccionesventana:
+                texto = fuente.render(linea, True, verde)
+                screen.blit(texto, (20, y))
+                y += 55
+
+            mouse_pos = pygame.mouse.get_pos()
+            hover_cerrar = boton_cerrar.collidepoint(mouse_pos)
+            color_cerrar = (200, 200, 200) if hover_cerrar else (255, 255, 255)
+            pygame.draw.rect(screen, color_cerrar, boton_cerrar)
+            pygame.draw.rect(screen, negro, boton_cerrar, 2)
+
+            texto_cerrar = fuente.render("Cerrar", True, negro)
+            screen.blit(texto_cerrar, (boton_cerrar.centerx - texto_cerrar.get_width() // 2,
+                                       boton_cerrar.centery - texto_cerrar.get_height() // 2))
+
+            pygame.display.flip()
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+                elif event.type == pygame.MOUSEBUTTONDOWN:
+                    if boton_cerrar.collidepoint(mouse_pos):
+                        esperando = False
 
     def obtener_celda(pos):
         x, y = pos
@@ -213,43 +274,7 @@ def jugar_sopa_letras(palabras=None, filas=7, columnas=7, tam_celda=65):
 
     def menu_inicio():
         screen.blit(fondo, (0, 0))
-        fuente = pygame.font.Font('letras/letraproyecto.ttf', 20)
-        # Título principal
-        titulo = fuente.render("LETRAS", True, negro)
-        screen.blit(titulo, (width // 2 - titulo.get_width() // 2, 100))
-
-        # Subtítulo
-        subtitulo = fuente.render(f"Encuentra las {NUM_PALABRAS} palabras ocultas", True, negro)
-        screen.blit(subtitulo, (width // 2 - subtitulo.get_width() // 2, 160))
-
-        # Instrucciones
-        instrucciones = [
-            "Cómo se juega:",
-            "- Encuentra palabras seleccionando letras contiguas",
-            "- Puedes usar cada letra en múltiples palabras",
-            "- No se permiten diagonales",
-            "¡ATENCIÓN!",
-            "No todas las palabras formadas serán válidas",
-            "Solo cuentan las palabras propuestas"
-        ]
-        y_pos = 220
-        for linea in instrucciones:
-            texto = fuente.render(linea, True, negro)
-            screen.blit(texto, (width // 2 - texto.get_width() // 2, y_pos))
-            y_pos += 30
-
-        # Mensaje para comenzar
-        mensaje_inicio = fuente.render("Presiona cualquier tecla para comenzar", True, negro)
-        screen.blit(mensaje_inicio, (width // 2 - mensaje_inicio.get_width() // 2, y_pos + 50))
-
         pygame.display.flip()
-        esperando = True
-        while esperando:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    return False
-                elif event.type == pygame.KEYDOWN:
-                    esperando = False
         return True
 
     def pantalla_fin():
@@ -316,6 +341,7 @@ def jugar_sopa_letras(palabras=None, filas=7, columnas=7, tam_celda=65):
                     elif boton_no.collidepoint(mouse_pos):
                         return "salir"
 
+
             clock.tick(30)
 
     def generar_sopa_serpiente_superpuesta(lista_palabras, cantidad_objetivo):
@@ -372,19 +398,20 @@ def jugar_sopa_letras(palabras=None, filas=7, columnas=7, tam_celda=65):
 
         corriendo = True
         while corriendo:
-            boton_resolver,boton_menu = dibujar(matriz, seleccionadas, resolver=False)
+            boton_resolver,boton_menu,boton_reglas= dibujar(matriz, seleccionadas, resolver=False)
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
                 elif event.type == pygame.MOUSEBUTTONDOWN:
-                    if boton_resolver.collidepoint(event.pos):
-                        # Mostrar todas las palabras encontradas primero
-                        palabras_encontradas = list(PALABRAS)
-                        pass
+
+                    if boton_reglas.collidepoint(event.pos):
+                        mostrar_reglas()  # SE LLAMA Y SE SALE, no sigue evaluando otros botones
                     elif boton_menu.collidepoint(event.pos):
-                        return  # Sale del juego y vuelve al menú
+                        return
+                    elif boton_resolver.collidepoint(event.pos):
+                        resolver = True
 
                         # Dibujar la pantalla con todas las palabras en verde
                         for _ in range(30):  # Mostrar durante aproximadamente 1 segundo (30 frames)
