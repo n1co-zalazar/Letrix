@@ -1,8 +1,8 @@
 import pygame
 import const2
 from boton import Boton
-import LEXIRETO
-import LETRAS
+import lexiretofinal
+import letrascasifinal
 
 
 class Juego:
@@ -28,7 +28,7 @@ class Juego:
                   const2.color_opciones, const2.posicion_lexireto),
             Boton('Letras', self.titulo_opciones, const2.blanco,
                   const2.color_opciones, const2.posicion_letras),
-            Boton('Salir', self.titulo_opciones, const2.blanco,
+            Boton('Cerrar Sesión', self.titulo_opciones, const2.blanco,
                   const2.color_opciones, const2.posicion_salir),
         ]
 
@@ -79,7 +79,7 @@ class Juego:
                             self.ejecutar_lexireto()
                         elif boton.texto == 'Letras':
                             self.ejecutar_letras()
-                        elif boton.texto == 'Salir':
+                        elif boton.texto == 'Cerrar Sesión':
                             self.run, self.play = False, False
                             pygame.quit()
                             quit()
@@ -87,7 +87,7 @@ class Juego:
     def ejecutar_lexireto(self):
         """Ejecuta el juego Lexireto"""
         self.play = False  # Pausamos el menú principal
-        LEXIRETO.main()  # Ejecutamos Lexireto
+        lexiretofinal.main()  # Ejecutamos Lexireto
         self.play = True  # Volvemos al menú principal al terminar
         # Restablecemos la pantalla
         self.ventana = pygame.display.set_mode((self.Ancho, self.Largo))
@@ -95,7 +95,7 @@ class Juego:
     def ejecutar_letras(self):
         """Ejecuta el juego Letras"""
         self.play = False  # Pausamos el menú principal
-        LETRAS.jugar_sopa_letras()  # Ejecutamos Letras
+        letrascasifinal.jugar_sopa_letras()  # Ejecutamos Letras
         self.play = True  # Volvemos al menú principal al terminar
         # Restablecemos la pantalla
         self.ventana = pygame.display.set_mode((self.Ancho, self.Largo))
