@@ -4,9 +4,25 @@ import math
 import random
 import const2
 import sys
+import os
+import json
 
 
-def main():
+def cargar_partida(usuario):
+    try:
+        with open(f"partidas/{usuario}_save.json", "r") as f:
+            return json.load(f)
+    except FileNotFoundError:
+        return None
+
+
+def guardar_partida(usuario, estado):
+    os.makedirs("partidas", exist_ok=True)
+    with open(f"partidas/{usuario}_save.json", "w") as f:
+        json.dump(estado, f)
+
+
+def main(estado_partida=None):
     pygame.init()
     # Configuración inicial
     ANCHO = const2.width
@@ -47,6 +63,7 @@ def main():
     mensaje_error_palabra = ""
     color_error_palabra = ROJO
 
+
     # ------------------------funciones generar letras y palabras validas----------------------------------------------------
     def generar_letras_validas(diccionario_path, min_palabras=30, max_intentos=100):
         with open(diccionario_path, "r", encoding="utf-8") as f:
@@ -84,11 +101,19 @@ def main():
 
         return None, None, set()
 
-    # cargar letras validas
-    LETRAS, LETRA_CENTRAL, palabras_validas = generar_letras_validas("diccionario_sin_acentos.txt")
-    if not LETRAS:
-        print("No se pudo generar un conjunto valido de letras")
-        return
+    if estado_partida and estado_partida.get("letras_panal"):
+        LETRAS = estado_partida["letras_panal"]
+        LETRA_CENTRAL = estado_partida["letra_central"]
+        palabras_validas = set(estado_partida.get("palabras_validas", []))
+        puntaje_actual = estado_partida.get("puntaje", 0)
+        tiempo_inicio = pygame.time.get_ticks() - estado_partida.get("tiempo_transcurrido", 0) * 1000
+    else:
+        LETRAS, LETRA_CENTRAL, palabras_validas = generar_letras_validas("diccionario_sin_acentos.txt")
+        if not LETRAS:
+            print("No se pudo generar un conjunto válido de letras")
+            return
+
+        tiempo_inicio = pygame.time.get_ticks()
 
     # asegurar que la letra central este en la primera posicion
     if LETRA_CENTRAL in LETRAS:
@@ -117,6 +142,15 @@ def main():
 
     todas_encontradas = set()
     lista_palabras_encontradas = []
+
+    if estado_partida:
+        for letra, info in estado_partida.get("palabras_encontradas", {}).items():
+            if letra in palabras_encontradas:
+                palabras_encontradas[letra]['palabras'] = info.get('palabras', [])
+                palabras_encontradas[letra]['contador'] = info.get('contador', 0)
+
+        todas_encontradas = set(estado_partida.get("palabras_encontradas_todas", []))
+        lista_palabras_encontradas = estado_partida.get("lista_palabras_encontradas", [])
 
     # -------------------------------funciones de dibujar hexagonos-------------------------------------------------------
     def obtener_puntos_hexagono(cx, cy, radio):
@@ -312,11 +346,6 @@ def main():
                     if boton_cerrar.collidepoint(event.pos):
                         esperando = False  # Salir del bucle al hacer clic en "Cerrar"
 
-    def mostrar_mensaje(mensaje, color):
-        global mensaje_actual, color_mensaje, tiempo_mensaje_inicio
-        mensaje_actual = mensaje
-        color_mensaje = color
-        tiempo_mensaje_inicio = pygame.time.get_ticks()
 
     def mostrar_pausa(fondo_pausa=None):
         #ventana de pausa
@@ -401,7 +430,8 @@ def main():
         boton_volver = dibujar_boton("Volver", 30, 90, ancho_boton, alto_boton, (mx, my))
         boton_pausa = dibujar_boton("Pausa", 30, 30, ancho_boton, alto_boton, (mx, my))
 
-        return boton_borrar_palabra, boton_aplicar, boton_borrar_letra, boton_volver,boton_pausa
+        boton_guardar = dibujar_boton("Guardar", ANCHO - 250, 30, ancho_boton, alto_boton, (mx, my))
+        return boton_borrar_palabra, boton_aplicar, boton_borrar_letra, boton_volver, boton_pausa, boton_guardar
 
     # juego
     cx, cy = ANCHO / 2, 260  # centro de los hexagonos
@@ -433,8 +463,7 @@ def main():
             ventana.blit(texto, rect)
 
         # dibujar botones
-        boton_borrar_palabra, boton_aplicar, boton_borrar_letra, boton_volver,boton_pausa = dibujar_botones(cx, 550,
-                                                                                                              mx, my)
+        boton_borrar_palabra, boton_aplicar, boton_borrar_letra, boton_volver,boton_pausa, boton_guardar = dibujar_botones(cx, 550,mx, my)
 
         # Dibujar mensaje de error específico (con fuente grande y posición ajustada)
         if mensaje_error_palabra:
@@ -495,6 +524,20 @@ def main():
                     mensaje_error_palabra = ""  # Limpiar mensaje de error al borrar
                 elif boton_aplicar.collidepoint(mx, my):
                     aplicar_palabra()
+                elif boton_guardar.collidepoint(mx, my):
+                    estado = {
+                        "letras_panal": LETRAS,
+                        "letra_central": LETRA_CENTRAL,
+                        "palabras_validas": list(palabras_validas),
+                        "palabras_encontradas": palabras_encontradas,
+                        "palabras_encontradas_todas": list(todas_encontradas),
+                        "lista_palabras_encontradas": lista_palabras_encontradas,
+                        "puntaje": puntaje_actual,
+                        "tiempo_transcurrido": (pygame.time.get_ticks() - tiempo_inicio) // 1000
+                    }
+                    guardar_partida("jugador", estado)
+                    mostrar_mensaje("Partida guardada", VERDE)
+
                 elif boton_volver.collidepoint(mx, my):
                     return
                 else:
@@ -525,4 +568,9 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    estado_partida = None
+    if len(sys.argv) > 1 and sys.argv[1] == "--cargar":
+        usuario = sys.argv[2] if len(sys.argv) > 2 else "jugador"
+        estado_partida = cargar_partida(usuario)
+
+    main(estado_partida)
