@@ -25,12 +25,18 @@ class Juego:
         # Botones
         self.botones = [
             Boton('Lexireto', self.titulo_opciones, const2.blanco,
-                  const2.color_opciones, const2.posicion_lexireto),
+                  const2.color_opciones, 250),
             Boton('Letras', self.titulo_opciones, const2.blanco,
-                  const2.color_opciones, const2.posicion_letras),
+                  const2.color_opciones, 350),
             Boton('Cerrar Sesión', self.titulo_opciones, const2.blanco,
-                  const2.color_opciones, const2.posicion_salir),
+                  const2.color_opciones, 450),
         ]
+    
+
+    def _centrar_titulo(self, texto, fuente, y_pos):
+        texto_render = fuente.render(texto, True, const2.blanco)
+        x_centrado = (self.Ancho - texto_render.get_width()) // 2
+        return x_centrado, y_pos
 
     def mover_fondo(self):
         """Actualiza la posición del fondo para el efecto de desplazamiento continuo."""
@@ -52,17 +58,19 @@ class Juego:
             #Mover el fondo
             self.mover_fondo()
 
-            #Dibujar el título
-            self.crea_titulo('PressStart2P-Regular', const2.nombre_juego,
-                             const2.negro, const2.blanco, const2.posicion_titulo2, const2.posicion_titulo)
+            titulo_pos = self._centrar_titulo(const2.nombre_juego, self.titulo_fuente, const2.MARGEN_SUPERIOR)
+            sombra_pos = (titulo_pos[0] - const2.DESPLAZAMIENTO_SOMBRA, titulo_pos[1] + const2.DESPLAZAMIENTO_SOMBRA)
 
-            # Obtener posición del mouse
+            # Renderiza sombra y título
+            titulo_sombra = self.titulo_fuente.render(const2.nombre_juego, True, const2.negro)
+            titulo_main = self.titulo_fuente.render(const2.nombre_juego, True, const2.blanco)
+            self.ventana.blit(titulo_sombra, sombra_pos)
+            self.ventana.blit(titulo_main, titulo_pos)
+
+            # Dibuja botones (ya están centrados automáticamente)
             mouse_pos = pygame.mouse.get_pos()
-
-            #Dibujar los botones
             for boton in self.botones:
                 boton.dibujar(self.ventana, mouse_pos)
-
             pygame.display.update()
 
     def check_eventos(self):

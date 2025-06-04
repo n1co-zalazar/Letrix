@@ -23,15 +23,8 @@ nombre_lexireto = 'Lexireto'
 nombre_letras = 'Letras'
 nombre_salir = 'Salir'
 
-# posición del titulo
-posicion_titulo = (500, 150)
-posicion_titulo2 = (495, 155)
 
-posicion_lexireto = (500, 250)
-posicion_sub_lexireto = (495, 255)
-
-posicion_letras = (500, 350)
-posicion_sub_letras = (495, 355)
-
-posicion_salir = (500, 450)
-posicion_sub_salir = (495, 455)
+# Añade al final:
+MARGEN_SUPERIOR = 150       # Espacio desde el borde superior
+ESPACIADO_BOTONES = 100      # Distancia vertical entre botones
+DESPLAZAMIENTO_SOMBRA = 5    # Desplazamiento para el efecto de sombra
