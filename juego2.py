@@ -36,7 +36,7 @@ class Juego:
     def _centrar_titulo(self, texto, fuente, y_pos):
         texto_render = fuente.render(texto, True, const2.blanco)
         x_centrado = (self.Ancho - texto_render.get_width()) // 2
-        return (x_centrado, y_pos)
+        return x_centrado, y_pos
 
     def mover_fondo(self):
         """Actualiza la posición del fondo para el efecto de desplazamiento continuo."""
