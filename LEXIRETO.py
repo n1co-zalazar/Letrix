@@ -3,6 +3,7 @@ import math
 import random
 import const2
 
+
 def main():
     pygame.init()
     # Configuración inicial
@@ -39,7 +40,7 @@ def main():
     color_mensaje = NEGRO
     tiempo_mensaje_inicio = 0
     duracion_mensaje = 2000
-    
+
     # Variable específica para mensaje de palabra no válida
     mensaje_error_palabra = ""
     color_error_palabra = ROJO
@@ -169,7 +170,7 @@ def main():
             return False
         return True
 
-    def calcular_puntos(palabra): #calcula cantidad de puntos totales
+    def calcular_puntos(palabra):  # calcula cantidad de puntos totales
         if set(palabra) == set(LETRAS):  # Heptacrack: contiene las 7 letras
             return 10
         elif len(palabra) == 3:
@@ -266,6 +267,50 @@ def main():
         color_mensaje = color
         tiempo_mensaje_inicio = pygame.time.get_ticks()
 
+    def mostrar_reglas():
+        reglas_fondo = pygame.Surface((ANCHO, ALTO))
+        reglas_fondo.fill(NEGRO)
+        fuente = pygame.font.Font('letras/letraproyecto.ttf', 20)
+        instruccionesventana = [
+            "---------------------------------------------------------------------------",
+            "                        REGLAS DEL LEXIRETO                            ",
+            "---------------------------------------------------------------------------",
+            "-Forma palabras de al menos 3 letras. Puedes repetir las letras,pero"," siempre incluyendo la letra central.",
+            "-Encuentra palabras que incluyan las 7 letras (¡Heptacrack!) y ","subirás de posición en Cómo va tu juego y mejorarás tus estadísticas.",
+            "----------------------------PUNTUACION---------------------------------------",
+            "-las palabras de 3 letras dan 1 punto y las de 4 letras, 2 puntos.","A partir de 5 letras, obtendrás tantos puntos como letras tenga la","palabra. Los heptacracks valen 10 puntos."
+        ]
+
+        boton_cerrar = pygame.Rect(ANCHO // 2 - 80, ALTO - 100, 160, 50)
+        esperando = True
+        while esperando:
+            ventana.blit(reglas_fondo, (0, 0))
+            y = 30
+            for linea in instruccionesventana:
+                texto = fuente.render(linea, True, VERDE)
+                ventana.blit(texto, (20, y))
+                y += 55
+
+            mouse_pos = pygame.mouse.get_pos()
+            hover_cerrar = boton_cerrar.collidepoint(mouse_pos)
+            color_cerrar = (200, 200, 200) if hover_cerrar else (255, 255, 255)
+            pygame.draw.rect(ventana, color_cerrar, boton_cerrar)
+            pygame.draw.rect(ventana, NEGRO, boton_cerrar, 2)
+
+            texto_cerrar = fuente.render("Cerrar", True, NEGRO)
+            ventana.blit(texto_cerrar, (boton_cerrar.centerx - texto_cerrar.get_width() // 2,
+                                        boton_cerrar.centery - texto_cerrar.get_height() // 2))
+
+            pygame.display.flip()
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+                elif event.type == pygame.MOUSEBUTTONDOWN:
+                    if boton_cerrar.collidepoint(mouse_pos):
+                        esperando = False
+
     def dibujar_botones(cx, y_botones, mx, my):
         ancho_boton = 219
         alto_boton = 50
@@ -281,8 +326,8 @@ def main():
         boton_aplicar = dibujar_boton("Aplicar", x_aplicar, y_botones, ancho_boton, alto_boton, (mx, my))
         boton_borrar_letra = dibujar_boton("Borrar letra", x_borrar_letra, y_botones, ancho_boton, alto_boton, (mx, my))
         boton_volver = dibujar_boton("Volver", 30, y_botones + alto_boton + 95, ancho_boton, alto_boton, (mx, my))
-
-        return boton_borrar_palabra, boton_aplicar, boton_borrar_letra, boton_volver
+        boton_reglas=dibujar_boton("Reglas", 30, y_botones + alto_boton + 30, ancho_boton, alto_boton, (mx, my))
+        return boton_borrar_palabra, boton_aplicar, boton_borrar_letra, boton_volver,boton_reglas
 
     # juego
     cx, cy = ANCHO / 2, 260  # centro de los hexagonos
@@ -314,8 +359,8 @@ def main():
             ventana.blit(texto, rect)
 
         # dibujar botones
-        boton_borrar_palabra, boton_aplicar, boton_borrar_letra, boton_volver = dibujar_botones(cx, 550, mx, my)
-        
+        boton_borrar_palabra, boton_aplicar, boton_borrar_letra, boton_volver,boton_reglas = dibujar_botones(cx, 550, mx, my)
+
         # Dibujar mensaje de error específico (con fuente grande y posición ajustada)
         if mensaje_error_palabra:
             texto_error = FUENTE_ERROR.render(mensaje_error_palabra, True, color_error_palabra)
@@ -340,7 +385,8 @@ def main():
         # mostrar tiempo
         tiempo_actual = pygame.time.get_ticks()
         tiempo_transcurrido = (tiempo_actual - tiempo_inicio) // 1000
-        texto_tiempo = FUENTE_TIEMPO.render(f"{tiempo_transcurrido // 60:02d}:{tiempo_transcurrido % 60:02d}", True, NEGRO)
+        texto_tiempo = FUENTE_TIEMPO.render(f"{tiempo_transcurrido // 60:02d}:{tiempo_transcurrido % 60:02d}", True,
+                                            NEGRO)
         ventana.blit(texto_tiempo, (ANCHO - 1330, ALTO - 680))  # posicion del tiempo
         # linea base fija debajo de la palabra
         linea_largo = 400  # largor de la linea
@@ -363,7 +409,9 @@ def main():
             if evento.type == pygame.QUIT:
                 run = False
             elif evento.type == pygame.MOUSEBUTTONDOWN:
-                if boton_borrar_palabra.collidepoint(mx, my):
+                if boton_reglas.collidepoint(mx,my):
+                    mostrar_reglas()  # SE LLAMA Y SE SALE, no sigue evaluando otros botones
+                elif boton_borrar_palabra.collidepoint(mx, my):
                     seleccionados.clear()
                     mensaje_error_palabra = ""  # Limpiar mensaje de error al borrar
                 elif boton_borrar_letra.collidepoint(mx, my) and seleccionados:
@@ -398,6 +446,7 @@ def main():
 
     pygame.display.set_caption("Palabrerío")
     return
+
 
 if __name__ == "__main__":
     main()
