@@ -254,34 +254,23 @@ def main ():
         color_mensaje = color
         tiempo_mensaje_inicio = pygame.time.get_ticks()
 
-
     def dibujar_botones(cx, y_botones, mx, my):
         ancho_boton = 219
         alto_boton = 50
         espacio_entre_boton = 20
 
         x_aplicar = cx - ancho_boton / 2
-        x_borrar_palabra = x_aplicar - ancho_boton - espacio_entre_boton
+        x_borrar_palabra = x_aplicar - (ancho_boton + espacio_entre_boton)
         x_borrar_letra = x_aplicar + ancho_boton + espacio_entre_boton
+        x_volver = cx - ancho_boton / 2  # debajo de los otros botones
 
         boton_borrar_palabra = dibujar_boton("Borrar palabra", x_borrar_palabra, y_botones, ancho_boton, alto_boton,
                                              (mx, my))
         boton_aplicar = dibujar_boton("Aplicar", x_aplicar, y_botones, ancho_boton, alto_boton, (mx, my))
         boton_borrar_letra = dibujar_boton("Borrar letra", x_borrar_letra, y_botones, ancho_boton, alto_boton, (mx, my))
+        boton_volver = dibujar_boton("Volver",30, y_botones + alto_boton + 95, ancho_boton, alto_boton, (mx, my))
 
-        # Dibujar botón Volver al menú
-        boton_menu = pygame.Rect(12, ANCHO - 300, 170, 45)
-        hover_menu = boton_menu.collidepoint(mx,my)
-        color_menu = (200, 200, 200) if hover_menu else BLANCO
-        pygame.draw.rect(ventana, color_menu, boton_menu)
-        pygame.draw.rect(ventana, NEGRO, boton_menu, 2)
-
-        texto_menu = FUENTE.render("Volver", True, NEGRO)
-        ventana.blit(texto_menu, (boton_menu.centerx - texto_menu.get_width() // 2,
-                                 boton_menu.centery - texto_menu.get_height() // 2))
-
-        return boton_borrar_palabra, boton_aplicar, boton_borrar_letra,boton_menu
-
+        return boton_borrar_palabra, boton_aplicar, boton_borrar_letra, boton_volver
 
     # juego
     cx, cy = ANCHO / 2, 260  # centro de los hexagonos
@@ -313,7 +302,7 @@ def main ():
             ventana.blit(texto, rect)
 
         # dibujar botones
-        boton_borrar_palabra, boton_aplicar, boton_borrar_letra,boton_menu = dibujar_botones(cx, 550, mx, my)
+        boton_borrar_palabra, boton_aplicar, boton_borrar_letra, boton_volver = dibujar_botones(cx, 550, mx, my)
         # dibujar palabra actual
         letras_renderizadas = [FUENTE.render(letra, True, NEGRO) for letra in seleccionados]
         anchos_letras = [texto.get_width() for texto in letras_renderizadas]
@@ -360,7 +349,7 @@ def main ():
                         seleccionados.pop()
                     elif boton_aplicar.collidepoint(mx, my):
                         aplicar_palabra()
-                    elif boton_menu.collidepoint(mx, my):
+                    elif boton_volver.collidepoint(mx, my):
                         return
                     else:
                         for i, poligono in enumerate(hexagonos):
@@ -387,5 +376,5 @@ def main ():
     pygame.display.set_caption("Palabrerío")
     return
 
-if __name__ == "__main__":
+if __name__ == "_main_":
     main()
