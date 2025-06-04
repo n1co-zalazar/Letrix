@@ -3,6 +3,7 @@ import pygame
 import math
 import random
 import const2
+import sys
 
 
 def main():
@@ -182,7 +183,7 @@ def main():
             return len(palabra)
         return 0
 
-    # Calcular el puntaje máximo posible
+    # Calcular el puntaje maximo posible
     puntaje_total = sum(calcular_puntos(p) for p in palabras_validas)
     puntaje_actual = 0
 
@@ -201,12 +202,12 @@ def main():
             return False
 
         if not set(palabra).issubset(set(LETRAS)):
-            mostrar_mensaje("Letras no válidas", ROJO)
+            mostrar_mensaje("Letras no validas", ROJO)
             mensaje_error_palabra = ""
             return False
 
         if palabra not in palabras_validas:
-            mensaje_error_palabra = "Palabra no válida"
+            mensaje_error_palabra = "Palabra no valida"
             color_error_palabra = ROJO
             mostrar_mensaje("", NEGRO)  # Limpiar mensaje superior
             return False
@@ -231,7 +232,7 @@ def main():
         return True
 
     def dibujar_palabras_encontradas(scroll_offset):
-        x_inicio, y_inicio = ANCHO - 280, ALTO - 680
+        x_inicio, y_inicio = ANCHO - 180, ALTO - 510
         area_altura = ALTO - y_inicio
         contenido_altura = sum(30 + len(info['palabras']) * 25 + 15 for info in palabras_encontradas.values())
 
@@ -318,7 +319,7 @@ def main():
         tiempo_mensaje_inicio = pygame.time.get_ticks()
 
     def mostrar_pausa(fondo_pausa=None):
-        # Tamaño de la ventana de pausa
+        #ventana de pausa
         pausa_ancho = ANCHO // 2
         pausa_alto = ALTO // 2
         pausa_x = (ANCHO - pausa_ancho) // 2
@@ -470,8 +471,8 @@ def main():
         pygame.draw.line(ventana, NEGRO, (x_linea, y_linea), (x_linea + linea_largo, y_linea), linea_alto)
         # Mostrar progreso de puntuación
         porcentaje = int((puntaje_actual / puntaje_total) * 100) if puntaje_total > 0 else 0
-        texto_puntos = FUENTE.render(f"{puntaje_actual}/{puntaje_total} ({porcentaje}%)", True, NEGRO)
-        ventana.blit(texto_puntos, (ANCHO - 800, 10))  # Ajusta la posición si hace falta
+        texto_puntos = FUENTE.render(f"Puntos: {puntaje_actual}/{puntaje_total} ({porcentaje}%)", True, NEGRO)
+        ventana.blit(texto_puntos, (ANCHO - 900, 10))  #posicion de la puntuacion
 
         # Mostrar mensajes generales
         if mensaje_actual and pygame.time.get_ticks() - tiempo_mensaje_inicio < duracion_mensaje:
