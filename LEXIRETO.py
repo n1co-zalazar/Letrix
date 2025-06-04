@@ -1,3 +1,4 @@
+
 import pygame
 import math
 import random
@@ -230,7 +231,7 @@ def main():
         return True
 
     def dibujar_palabras_encontradas(scroll_offset):
-        x_inicio, y_inicio = ANCHO - 350, ALTO - 680
+        x_inicio, y_inicio = ANCHO - 280, ALTO - 680
         area_altura = ALTO - y_inicio
         contenido_altura = sum(30 + len(info['palabras']) * 25 + 15 for info in palabras_encontradas.values())
 
@@ -261,12 +262,6 @@ def main():
 
         return scroll_offset
 
-    def mostrar_mensaje(mensaje, color):
-        global mensaje_actual, color_mensaje, tiempo_mensaje_inicio
-        mensaje_actual = mensaje
-        color_mensaje = color
-        tiempo_mensaje_inicio = pygame.time.get_ticks()
-
     def mostrar_reglas():
         reglas_fondo = pygame.Surface((ANCHO, ALTO))
         reglas_fondo.fill(NEGRO)
@@ -275,10 +270,14 @@ def main():
             "---------------------------------------------------------------------------",
             "                        REGLAS DEL LEXIRETO                            ",
             "---------------------------------------------------------------------------",
-            "-Forma palabras de al menos 3 letras. Puedes repetir las letras,pero"," siempre incluyendo la letra central.",
-            "-Encuentra palabras que incluyan las 7 letras (¡Heptacrack!) y ","subirás de posición en Cómo va tu juego y mejorarás tus estadísticas.",
+            "-Forma palabras de al menos 3 letras. Puedes repetir las letras,pero",
+            " siempre incluyendo la letra central.",
+            "-Encuentra palabras que incluyan las 7 letras (¡Heptacrack!) y ",
+            "subirás de posición en Cómo va tu juego y mejorarás tus estadísticas.",
             "----------------------------PUNTUACION---------------------------------------",
-            "-las palabras de 3 letras dan 1 punto y las de 4 letras, 2 puntos.","A partir de 5 letras, obtendrás tantos puntos como letras tenga la","palabra. Los heptacracks valen 10 puntos."
+            "-las palabras de 3 letras dan 1 punto y las de 4 letras, 2 puntos.",
+            "A partir de 5 letras, obtendrás tantos puntos como letras tenga la",
+            "palabra. Los heptacracks valen 10 puntos."
         ]
 
         boton_cerrar = pygame.Rect(ANCHO // 2 - 80, ALTO - 100, 160, 50)
@@ -301,6 +300,7 @@ def main():
             ventana.blit(texto_cerrar, (boton_cerrar.centerx - texto_cerrar.get_width() // 2,
                                         boton_cerrar.centery - texto_cerrar.get_height() // 2))
 
+
             pygame.display.flip()
 
             for event in pygame.event.get():
@@ -308,8 +308,80 @@ def main():
                     pygame.quit()
                     sys.exit()
                 elif event.type == pygame.MOUSEBUTTONDOWN:
-                    if boton_cerrar.collidepoint(mouse_pos):
+                    if boton_cerrar.collidepoint(event.pos):
+                        esperando = False  # Salir del bucle al hacer clic en "Cerrar"
+
+    def mostrar_mensaje(mensaje, color):
+        global mensaje_actual, color_mensaje, tiempo_mensaje_inicio
+        mensaje_actual = mensaje
+        color_mensaje = color
+        tiempo_mensaje_inicio = pygame.time.get_ticks()
+
+    def mostrar_pausa(fondo_pausa=None):
+        # Tamaño de la ventana de pausa
+        pausa_ancho = ANCHO // 2
+        pausa_alto = ALTO // 2
+        pausa_x = (ANCHO - pausa_ancho) // 2
+        pausa_y = (ALTO - pausa_alto) // 2
+
+        # Superficie con transparencia
+        pausa_ventana = pygame.Surface((pausa_ancho, pausa_alto), pygame.SRCALPHA)
+        pausa_ventana.set_alpha(230)
+
+        # Si se proporciona una imagen de fondo, cargarla y escalarla
+        if fondo_pausa:
+            fondo_img = pygame.image.load(fondo_pausa).convert()
+            fondo_img = pygame.transform.scale(fondo_img, (pausa_ancho, pausa_alto))
+            pausa_ventana.blit(fondo_img, (0, 0))
+        else:
+            pausa_ventana.fill(NEGRO)
+
+        fuente = pygame.font.Font('letras/letraproyecto.ttf', 20)
+
+        # Crear botones dentro de la ventana de pausa
+        boton_reglaspausa = pygame.Rect(pausa_x + 20, pausa_y + 30, pausa_ancho - 40, 50)
+        boton_regresar = pygame.Rect(pausa_x + 20, pausa_y + 110, pausa_ancho - 40, 50)
+
+        esperando = True
+        while esperando:
+            ventana.blit(fondo, (0, 0))  # redibuja fondo del juego por detrás (si lo usás)
+            ventana.blit(pausa_ventana, (pausa_x, pausa_y))
+
+            mouse_pos = pygame.mouse.get_pos()
+
+            # Botón REGLAS
+            hover_reglas = boton_reglaspausa.collidepoint(mouse_pos)
+            color_reglas = (200, 200, 200) if hover_reglas else (255, 255, 255)
+            pygame.draw.rect(ventana, color_reglas, boton_reglaspausa, border_radius=5)
+            pygame.draw.rect(ventana, NEGRO, boton_reglaspausa, 2, border_radius=5)
+            texto_reglas = fuente.render("Reglas", True, NEGRO)
+            ventana.blit(texto_reglas, texto_reglas.get_rect(center=boton_reglaspausa.center))
+
+            # Botón REGRESAR
+            hover_regresar = boton_regresar.collidepoint(mouse_pos)
+            color_regresar = (200, 200, 200) if hover_regresar else (255, 255, 255)
+            pygame.draw.rect(ventana, color_regresar, boton_regresar, border_radius=5)
+            pygame.draw.rect(ventana, NEGRO, boton_regresar, 2, border_radius=5)
+            texto_regresar = fuente.render("Regresar", True, NEGRO)
+            ventana.blit(texto_regresar, texto_regresar.get_rect(center=boton_regresar.center))
+
+            pygame.display.flip()
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+                elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                    if boton_reglaspausa.collidepoint(event.pos):
+                        mostrar_reglas()
+                    elif boton_regresar.collidepoint(event.pos):
                         esperando = False
+
+    def mostrar_mensaje(mensaje, color):
+        nonlocal mensaje_actual, color_mensaje, tiempo_mensaje_inicio
+        mensaje_actual = mensaje
+        color_mensaje = color
+        tiempo_mensaje_inicio = pygame.time.get_ticks()
 
     def dibujar_botones(cx, y_botones, mx, my):
         ancho_boton = 219
@@ -325,9 +397,10 @@ def main():
                                              (mx, my))
         boton_aplicar = dibujar_boton("Aplicar", x_aplicar, y_botones, ancho_boton, alto_boton, (mx, my))
         boton_borrar_letra = dibujar_boton("Borrar letra", x_borrar_letra, y_botones, ancho_boton, alto_boton, (mx, my))
-        boton_volver = dibujar_boton("Volver", 30, y_botones + alto_boton + 95, ancho_boton, alto_boton, (mx, my))
-        boton_reglas=dibujar_boton("Reglas", 30, y_botones + alto_boton + 30, ancho_boton, alto_boton, (mx, my))
-        return boton_borrar_palabra, boton_aplicar, boton_borrar_letra, boton_volver,boton_reglas
+        boton_volver = dibujar_boton("Volver", 30, 90, ancho_boton, alto_boton, (mx, my))
+        boton_pausa = dibujar_boton("Pausa", 30, 30, ancho_boton, alto_boton, (mx, my))
+
+        return boton_borrar_palabra, boton_aplicar, boton_borrar_letra, boton_volver,boton_pausa
 
     # juego
     cx, cy = ANCHO / 2, 260  # centro de los hexagonos
@@ -359,7 +432,8 @@ def main():
             ventana.blit(texto, rect)
 
         # dibujar botones
-        boton_borrar_palabra, boton_aplicar, boton_borrar_letra, boton_volver,boton_reglas = dibujar_botones(cx, 550, mx, my)
+        boton_borrar_palabra, boton_aplicar, boton_borrar_letra, boton_volver,boton_pausa = dibujar_botones(cx, 550,
+                                                                                                              mx, my)
 
         # Dibujar mensaje de error específico (con fuente grande y posición ajustada)
         if mensaje_error_palabra:
@@ -387,7 +461,7 @@ def main():
         tiempo_transcurrido = (tiempo_actual - tiempo_inicio) // 1000
         texto_tiempo = FUENTE_TIEMPO.render(f"{tiempo_transcurrido // 60:02d}:{tiempo_transcurrido % 60:02d}", True,
                                             NEGRO)
-        ventana.blit(texto_tiempo, (ANCHO - 1330, ALTO - 680))  # posicion del tiempo
+        ventana.blit(texto_tiempo, (ANCHO - 775, 710))  # posicion del tiempo
         # linea base fija debajo de la palabra
         linea_largo = 400  # largor de la linea
         linea_alto = 3
@@ -396,21 +470,21 @@ def main():
         pygame.draw.line(ventana, NEGRO, (x_linea, y_linea), (x_linea + linea_largo, y_linea), linea_alto)
         # Mostrar progreso de puntuación
         porcentaje = int((puntaje_actual / puntaje_total) * 100) if puntaje_total > 0 else 0
-        texto_puntos = FUENTE.render(f"Puntos:{puntaje_actual}/{puntaje_total} ({porcentaje}%)", True, NEGRO)
-        ventana.blit(texto_puntos, (ANCHO - 420, ALTO - 30))  # Ajusta la posición si hace falta
+        texto_puntos = FUENTE.render(f"{puntaje_actual}/{puntaje_total} ({porcentaje}%)", True, NEGRO)
+        ventana.blit(texto_puntos, (ANCHO - 800, 10))  # Ajusta la posición si hace falta
 
         # Mostrar mensajes generales
         if mensaje_actual and pygame.time.get_ticks() - tiempo_mensaje_inicio < duracion_mensaje:
             texto = FUENTE.render(mensaje_actual, True, color_mensaje)
-            ventana.blit(texto, (ANCHO // 2 - texto.get_width() // 2, 30))
+            ventana.blit(texto, (ANCHO // 2 - texto.get_width() // 2, 650))
 
         # Manejo de eventos
         for evento in pygame.event.get():
             if evento.type == pygame.QUIT:
                 run = False
             elif evento.type == pygame.MOUSEBUTTONDOWN:
-                if boton_reglas.collidepoint(mx,my):
-                    mostrar_reglas()  # SE LLAMA Y SE SALE, no sigue evaluando otros botones
+                if boton_pausa.collidepoint(mx,my):
+                    mostrar_pausa()
                 elif boton_borrar_palabra.collidepoint(mx, my):
                     seleccionados.clear()
                     mensaje_error_palabra = ""  # Limpiar mensaje de error al borrar
