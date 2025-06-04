@@ -3,6 +3,7 @@ import const2
 from boton import Boton
 import LETRAS
 import LEXIRETO
+import login
 
 
 class Juego:
@@ -88,10 +89,17 @@ class Juego:
                         elif boton.texto == 'Letras':
                             self.ejecutar_letras()
                         elif boton.texto == 'Cerrar Sesión':
-                            self.run, self.play = False, False
-                            pygame.quit()
-                            quit()
-
+                            self.play = False
+                            self.run = False
+                            # Vuelve a mostrar el login
+                            if login.pantalla_login():  # Si el login es exitoso
+                                self.__init__()  # Reinicia el juego
+                                self.play = True
+                                self.run = True
+                            else:  # Si el login falla o se cierra
+                                pygame.quit()
+                                quit()
+                                
     def ejecutar_lexireto(self):
         """Ejecuta el juego Lexireto"""
         self.play = False  # Pausamos el menú principal
