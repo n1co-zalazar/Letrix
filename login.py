@@ -4,7 +4,6 @@ import time
 
 
 def pantalla_login():
-
     pygame.init()
     screen = pygame.display.set_mode((600, 400))
     pygame.display.set_caption("Sistema de Login")
@@ -149,7 +148,15 @@ def pantalla_login():
                         activo = None
 
                 if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_RETURN:
+                    if event.key == pygame.K_TAB:  # Manejo de TAB para cambiar entre campos
+                        if activo == "username":
+                            activo = "password"
+                        elif activo == "password":
+                            activo = "username"
+                        # Prevenir el comportamiento por defecto de TAB
+                        continue
+                    
+                    elif event.key == pygame.K_RETURN:
                         usuarios = cargar_usuarios()
                         if modo == "login":
                             if username in usuarios and usuarios[username] == password:
@@ -179,15 +186,16 @@ def pantalla_login():
                             mensaje_temp = ""
                         elif activo == "password":
                             password = password[:-1]
-                    elif event.unicode.isprintable():
+                    else:  # Manejo de caracteres normales
                         if activo == "username":
-                            if len(username) < 14:
+                            if len(username) < 14 and event.unicode.isprintable():
                                 username += event.unicode
                                 mensaje_temp = ""
-                            else:
+                            elif len(username) >= 14:
                                 mensaje_temp = "Máx. 14 caracteres"
                         elif activo == "password":
-                            password += event.unicode
+                            if event.unicode.isprintable():
+                                password += event.unicode
 
         if estado == "inicio":
             dibujar_texto("Elige una opción:", 180, 60)
@@ -210,11 +218,11 @@ def pantalla_login():
                 contenido = username if campo == "username" else "*" * len(password)
                 dibujar_texto_input_centrado(contenido, rect, WHITE, font)
 
-            # Aquí está el cambio: botón "Volver" negro con texto blanco
             dibujar_rect_redondeado(screen, BLACK, boton_volver, 10)
             dibujar_texto_centrado_en_rect("Volver", boton_volver, WHITE, small_font, contorno=False)
 
             dibujar_texto("Presiona ENTER para continuar", 150, 230, WHITE)
+            dibujar_texto("Usa TAB para cambiar entre campos", 150, 350, WHITE, small_font)
             if caps and activo == "password":
                 dibujar_texto("¡Bloq Mayús está activo!", 200, 270, YELLOW, small_font)
             if mensaje:
