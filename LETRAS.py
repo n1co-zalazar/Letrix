@@ -178,41 +178,95 @@ def jugar_sopa_letras(palabras=None, filas=7, columnas=7, tam_celda=65):
 
 
         mouse_pos = pygame.mouse.get_pos()
-        boton_resolver = pygame.Rect(12, length - 550, 170, 45)
-        hover_resolver = boton_resolver.collidepoint(mouse_pos)
 
-        # Color del botón (gris claro cuando está el mouse encima)
-        color_boton = (200, 200, 200) if hover_resolver else blanco
-        pygame.draw.rect(screen, color_boton, boton_resolver)
-        pygame.draw.rect(screen, negro, boton_resolver, 2)
-
-        texto_resolver = fuente.render("Resolver", True, negro)
-        screen.blit(texto_resolver, (boton_resolver.centerx - texto_resolver.get_width() // 2,
-                                     boton_resolver.centery - texto_resolver.get_height() // 2))
-        # Dibujar botón Volver al menú
-        boton_menu = pygame.Rect(12, length - 490, 170, 45)
+        boton_menu = pygame.Rect(12, 210, 170, 45)
         hover_menu = boton_menu.collidepoint(mouse_pos)
         color_menu = (200, 200, 200) if hover_menu else blanco
         pygame.draw.rect(screen, color_menu, boton_menu)
         pygame.draw.rect(screen, negro, boton_menu, 2)
 
-        texto_menu = fuente.render("Volver", True, negro)
+        texto_menu = fuente.render("Pausa", True, negro)
         screen.blit(texto_menu, (boton_menu.centerx - texto_menu.get_width() // 2,
                                  boton_menu.centery - texto_menu.get_height() // 2))
 
-        # Botón Reglas
-        boton_reglas = pygame.Rect(12, length - 430, 170, 45)
-        hover_reglas = boton_reglas.collidepoint(mouse_pos)
-        color_reglas = (200, 200, 200) if hover_reglas else blanco
-        pygame.draw.rect(screen, color_reglas, boton_reglas)
-        pygame.draw.rect(screen, negro, boton_reglas, 2)
 
-        texto_reglas = fuente.render("Reglas", True, negro)
-        screen.blit(texto_reglas, (boton_reglas.centerx - texto_reglas.get_width() // 2,
-                                   boton_reglas.centery - texto_reglas.get_height() // 2))
+
+        boton_SALIR = pygame.Rect(12, 270, 170, 45)
+        hover_SALIR = boton_SALIR.collidepoint(mouse_pos)
+        color_SALIR = (200, 200, 200) if hover_SALIR else blanco
+        pygame.draw.rect(screen, color_SALIR, boton_SALIR)
+        pygame.draw.rect(screen, negro, boton_SALIR, 2)
+
+        texto_SALIR = fuente.render("Volver", True, negro)
+        screen.blit(texto_SALIR, (boton_SALIR.centerx - texto_SALIR.get_width() // 2,
+                                 boton_SALIR.centery - texto_SALIR.get_height() // 2))
 
         pygame.display.flip()
-        return boton_resolver, boton_menu,boton_reglas
+        return  boton_menu, boton_SALIR
+
+    def mostrar_pausa_con_resolver():
+        pausa_ancho = width // 2
+        pausa_alto = length // 2
+        pausa_x = (width - pausa_ancho) // 2
+        pausa_y = (length - pausa_alto) // 2
+
+        pausa_ventana = pygame.Surface((pausa_ancho, pausa_alto), pygame.SRCALPHA)
+        pausa_ventana.set_alpha(240)
+        pausa_ventana.fill((220, 220, 220))  # gris claro
+
+        fuente = pygame.font.Font('letras/letraproyecto.ttf', 24)
+
+        boton_resolver = pygame.Rect(pausa_x + 30, pausa_y + 30, pausa_ancho - 60, 50)
+        boton_reglas = pygame.Rect(pausa_x + 30, pausa_y + 100, pausa_ancho - 60, 50)
+        boton_volver = pygame.Rect(pausa_x + 30, pausa_y + 170, pausa_ancho - 60, 50)
+
+        resolviendo = False
+        esperando = True
+        while esperando:
+            screen.blit(fondo, (0, 0))
+            screen.blit(pausa_ventana, (pausa_x, pausa_y))
+
+            mouse_pos = pygame.mouse.get_pos()
+
+            # Dibujar botones
+            for boton, texto in [(boton_resolver, "Resolver"),
+                                 (boton_reglas, "Reglas"),
+                                 (boton_volver, "Regresar")]:
+                hover = boton.collidepoint(mouse_pos)
+                color = (200, 200, 200) if hover else blanco
+                pygame.draw.rect(screen, color, boton, border_radius=5)
+                pygame.draw.rect(screen, negro, boton, 2, border_radius=5)
+                texto_render = fuente.render(texto, True, negro)
+                screen.blit(texto_render, texto_render.get_rect(center=boton.center))
+
+            pygame.display.flip()
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+                elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                    if boton_reglas.collidepoint(mouse_pos):
+                        mostrar_reglas()
+                    elif boton_resolver.collidepoint(mouse_pos):
+                        # Dibujar la pantalla con todas las palabras en verde
+                        for _ in range(30):  # Mostrar durante aproximadamente 1 segundo (30 frames)
+                            dibujar(matriz, seleccionadas, resolver=True)
+                            pygame.display.flip()
+                            pygame.time.delay(110)  # ~30 FPS
+
+                        # Luego ir a la pantalla final
+                        resultado = pantalla_fin()
+                        if resultado == "salir":
+                            pygame.quit()
+                            sys.exit()
+                        else:
+                            corriendo = False
+                            break
+                    elif boton_volver.collidepoint(mouse_pos):
+                        esperando = False
+
+
 
     def mostrar_reglas():
         reglas_fondo = pygame.Surface((width, length))
@@ -263,7 +317,6 @@ def jugar_sopa_letras(palabras=None, filas=7, columnas=7, tam_celda=65):
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     if boton_cerrar.collidepoint(mouse_pos):
                         esperando = False
-
     def obtener_celda(pos):
         x, y = pos
         col = (x - offset_x) // tam_celda
@@ -398,36 +451,18 @@ def jugar_sopa_letras(palabras=None, filas=7, columnas=7, tam_celda=65):
 
         corriendo = True
         while corriendo:
-            boton_resolver,boton_menu,boton_reglas= dibujar(matriz, seleccionadas, resolver=False)
+            boton_menu,boton_SALIR= dibujar(matriz, seleccionadas, resolver=False)
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
+
                 elif event.type == pygame.MOUSEBUTTONDOWN:
-
-                    if boton_reglas.collidepoint(event.pos):
-                        mostrar_reglas()  # SE LLAMA Y SE SALE, no sigue evaluando otros botones
-                    elif boton_menu.collidepoint(event.pos):
+                    if boton_menu.collidepoint(event.pos):
+                        mostrar_pausa_con_resolver()
+                    elif boton_SALIR.collidepoint(event.pos):
                         return
-                    elif boton_resolver.collidepoint(event.pos):
-                        resolver = True
-
-                        # Dibujar la pantalla con todas las palabras en verde
-                        for _ in range(30):  # Mostrar durante aproximadamente 1 segundo (30 frames)
-                            dibujar(matriz, seleccionadas, resolver=True)
-                            pygame.display.flip()
-                            pygame.time.delay(33)  # ~30 FPS
-
-                        # Luego ir a la pantalla final
-                        resultado = pantalla_fin()
-                        if resultado == "salir":
-                            pygame.quit()
-                            sys.exit()
-                        else:
-                            corriendo = False
-                            break
-
                     celda = obtener_celda(pygame.mouse.get_pos())
                     if celda and celda not in seleccionadas:
                         if not seleccionadas or any(
@@ -451,7 +486,7 @@ def jugar_sopa_letras(palabras=None, filas=7, columnas=7, tam_celda=65):
                 for _ in range(30):  # Mostrar durante aproximadamente 1 segundo (30 frames)
                     dibujar(matriz, seleccionadas, resolver=True)
                     pygame.display.flip()
-                    pygame.time.delay(33)  # ~30 FPS
+                    pygame.time.delay(110)  # ~30 FPS
 
                 resultado = pantalla_fin()
                 if resultado == "salir":
