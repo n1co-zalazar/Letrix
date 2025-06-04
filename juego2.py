@@ -1,9 +1,11 @@
 import pygame
 import const2
 from boton import Boton
-import LETRAS
-import LEXIRETO
+import letrascasifinal
+import lexiretofinal
 import login
+import json
+import os
 
 
 class Juego:
@@ -13,9 +15,10 @@ class Juego:
         self.Ancho, self.Largo = const2.width, const2.length
         pygame.display.set_caption('Palabrerío')
         self.ventana = pygame.display.set_mode((self.Ancho, self.Largo))
+        self.username = None
 
         # Fondo
-        imagen_fon = pygame.image.load('imágenes/fondo3.png') #nombre del archivo imagen
+        imagen_fon = pygame.image.load('imágenes/fondo3.png')  # nombre del archivo imagen
         self.fon = pygame.transform.scale(imagen_fon, (const2.width, const2.length))  # ajustamos la imagen a la ventana
 
         # Fuente
@@ -32,7 +35,6 @@ class Juego:
             Boton('Cerrar Sesión', self.titulo_opciones, const2.blanco,
                   const2.color_opciones, 450),
         ]
-    
 
     def _centrar_titulo(self, texto, fuente, y_pos):
         texto_render = fuente.render(texto, True, const2.blanco)
@@ -53,10 +55,10 @@ class Juego:
         self.ventana.blit(self.fon, (self.i, 0))
         self.ventana.blit(self.fon, (self.Ancho + self.i, 0))
 
-    def bucle_juego (self):
+    def bucle_juego(self):
         while self.play:
             self.check_eventos()
-            #Mover el fondo
+            # Mover el fondo
             self.mover_fondo()
 
             titulo_pos = self._centrar_titulo(const2.nombre_juego, self.titulo_fuente, const2.MARGEN_SUPERIOR)
@@ -92,18 +94,20 @@ class Juego:
                             self.play = False
                             self.run = False
                             # Vuelve a mostrar el login
-                            if login.pantalla_login():  # Si el login es exitoso
+                            login_exitoso, username = login.pantalla_login()
+                            if login_exitoso:  # Si el login es exitoso
                                 self.__init__()  # Reinicia el juego
+                                self.username = username
                                 self.play = True
                                 self.run = True
                             else:  # Si el login falla o se cierra
                                 pygame.quit()
                                 quit()
-                                
+
     def ejecutar_lexireto(self):
         """Ejecuta el juego Lexireto"""
         self.play = False  # Pausamos el menú principal
-        LEXIRETO.main()  # Ejecutamos Lexireto
+        lexiretofinal.main(self.username)  # Ejecutamos Lexireto
         self.play = True  # Volvemos al menú principal al terminar
         # Restablecemos la pantalla
         self.ventana = pygame.display.set_mode((self.Ancho, self.Largo))
@@ -111,12 +115,12 @@ class Juego:
     def ejecutar_letras(self):
         """Ejecuta el juego Letras"""
         self.play = False  # Pausamos el menú principal
-        LETRAS.jugar_sopa_letras()  # Ejecutamos Letras
+        letrascasifinal.jugar_sopa_letras(self.username)  # Ejecutamos Letras
         self.play = True  # Volvemos al menú principal al terminar
         # Restablecemos la pantalla
         self.ventana = pygame.display.set_mode((self.Ancho, self.Largo))
 
-    def crea_titulo(self,letra, nombrejuego, colorsombra, colortitulo, posicionsombra, posiciontitulo):
+    def crea_titulo(self, letra, nombrejuego, colorsombra, colortitulo, posicionsombra, posiciontitulo):
         fuente_titulo = pygame.font.SysFont(letra, const2.tamano_letra_titulo)
 
         titulo1 = fuente_titulo.render(nombrejuego, True, colorsombra)
