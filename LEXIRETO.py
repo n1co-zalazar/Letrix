@@ -482,6 +482,7 @@ def main():
         for evento in pygame.event.get():
             if evento.type == pygame.QUIT:
                 run = False
+                sys.exit()
             elif evento.type == pygame.MOUSEBUTTONDOWN:
                 if boton_pausa.collidepoint(mx,my):
                     mostrar_pausa()
