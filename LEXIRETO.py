@@ -3,8 +3,7 @@ import math
 import random
 import const2
 
-def main ():
-
+def main():
     pygame.init()
     # Configuración inicial
     ANCHO = const2.width
@@ -22,6 +21,7 @@ def main ():
     scroll_offset = 0
     FUENTE = pygame.font.Font("letras/letraproyecto.ttf", 24)
     FUENTE_BOTON = pygame.font.Font("letras/letraproyecto.ttf", 15)
+    FUENTE_ERROR = pygame.font.Font("letras/letraproyecto.ttf", 22)  # Fuente más grande solo para el error
     FUENTE_TIEMPO = pygame.font.Font("letras/letraproyecto.ttf", 30)
 
     ventana = pygame.display.get_surface()
@@ -39,7 +39,10 @@ def main ():
     color_mensaje = NEGRO
     tiempo_mensaje_inicio = 0
     duracion_mensaje = 2000
-
+    
+    # Variable específica para mensaje de palabra no válida
+    mensaje_error_palabra = ""
+    color_error_palabra = ROJO
 
     # ------------------------funciones generar letras y palabras validas----------------------------------------------------
     def generar_letras_validas(diccionario_path, min_palabras=30, max_intentos=100):
@@ -78,7 +81,6 @@ def main ():
 
         return None, None, set()
 
-
     # cargar letras validas
     LETRAS, LETRA_CENTRAL, palabras_validas = generar_letras_validas("diccionario_sin_acentos.txt")
     if not LETRAS:
@@ -113,7 +115,6 @@ def main ():
     todas_encontradas = set()
     lista_palabras_encontradas = []
 
-
     # -------------------------------funciones de dibujar hexagonos-------------------------------------------------------
     def obtener_puntos_hexagono(cx, cy, radio):
         return [
@@ -121,7 +122,6 @@ def main ():
               cy + radio * math.sin(math.radians(60 * i - 30)))
             ) for i in range(6)
         ]
-
 
     def obtener_posiciones_hexagonos(cx, cy, distancia):
         return [
@@ -134,7 +134,6 @@ def main ():
             (cx - distancia / 2, cy + distancia * math.sin(math.radians(60))),  # abajo izquierda
         ]
 
-
     def punto_en_poligono(px, py, poligono):
         dentro = False
         j = len(poligono) - 1
@@ -146,7 +145,6 @@ def main ():
             j = i
         return dentro
 
-
     def dibujar_boton(texto, x, y, ancho, alto, mouse_pos):
         rect = pygame.Rect(x, y, ancho, alto)
         color = AZUL if rect.collidepoint(mouse_pos) else BLANCO
@@ -155,7 +153,6 @@ def main ():
         texto_render = FUENTE_BOTON.render(texto, True, NEGRO)
         ventana.blit(texto_render, texto_render.get_rect(center=rect.center))
         return rect
-
 
     # -------------------------------fin funciones de dibubar hexagonos-------------------------------------------------------------
     # ----------------------funciones de logica del juego----------------------------------------------------------------
@@ -188,33 +185,48 @@ def main ():
     puntaje_actual = 0
 
     def aplicar_palabra():
+        nonlocal mensaje_error_palabra, color_error_palabra
         palabra = "".join(seleccionados)
-
 
         if len(palabra) < 3:
             mostrar_mensaje("Palabra demasiado corta", ROJO)
+            mensaje_error_palabra = ""
             return False
 
         if LETRA_CENTRAL not in palabra:
             mostrar_mensaje("Falta la letra central", NARANJA)
+            mensaje_error_palabra = ""
             return False
 
-        if palabra_es_valida(palabra) and palabra not in todas_encontradas:
-            letra_inicial = palabra[0]
-            palabras_encontradas[letra_inicial]['palabras'].append(palabra)
-            todas_encontradas.add(palabra)
-            lista_palabras_encontradas.append(palabra)
-            seleccionados.clear()
-            puntos = calcular_puntos(palabra)
-            nonlocal puntaje_actual
-            puntaje_actual += puntos
+        if not set(palabra).issubset(set(LETRAS)):
+            mostrar_mensaje("Letras no válidas", ROJO)
+            mensaje_error_palabra = ""
+            return False
 
-            mostrar_mensaje("¡Palabra aceptada!", VERDE)
-            return True
+        if palabra not in palabras_validas:
+            mensaje_error_palabra = "Palabra no válida"
+            color_error_palabra = ROJO
+            mostrar_mensaje("", NEGRO)  # Limpiar mensaje superior
+            return False
 
-        mostrar_mensaje("Palabra no valida", (200, 0, 0))
-        return False
+        if palabra in todas_encontradas:
+            mostrar_mensaje("Palabra ya encontrada", NARANJA)
+            mensaje_error_palabra = ""
+            return False
 
+        # Si pasa todas las validaciones
+        letra_inicial = palabra[0]
+        palabras_encontradas[letra_inicial]['palabras'].append(palabra)
+        todas_encontradas.add(palabra)
+        lista_palabras_encontradas.append(palabra)
+        seleccionados.clear()
+        puntos = calcular_puntos(palabra)
+        nonlocal puntaje_actual
+        puntaje_actual += puntos
+        mensaje_error_palabra = ""  # Limpiar mensaje de error
+
+        mostrar_mensaje("¡Palabra aceptada!", VERDE)
+        return True
 
     def dibujar_palabras_encontradas(scroll_offset):
         x_inicio, y_inicio = ANCHO - 350, ALTO - 680
@@ -268,7 +280,7 @@ def main ():
                                              (mx, my))
         boton_aplicar = dibujar_boton("Aplicar", x_aplicar, y_botones, ancho_boton, alto_boton, (mx, my))
         boton_borrar_letra = dibujar_boton("Borrar letra", x_borrar_letra, y_botones, ancho_boton, alto_boton, (mx, my))
-        boton_volver = dibujar_boton("Volver",30, y_botones + alto_boton + 95, ancho_boton, alto_boton, (mx, my))
+        boton_volver = dibujar_boton("Volver", 30, y_botones + alto_boton + 95, ancho_boton, alto_boton, (mx, my))
 
         return boton_borrar_palabra, boton_aplicar, boton_borrar_letra, boton_volver
 
@@ -303,6 +315,15 @@ def main ():
 
         # dibujar botones
         boton_borrar_palabra, boton_aplicar, boton_borrar_letra, boton_volver = dibujar_botones(cx, 550, mx, my)
+        
+        # Dibujar mensaje de error específico (con fuente grande y posición ajustada)
+        if mensaje_error_palabra:
+            texto_error = FUENTE_ERROR.render(mensaje_error_palabra, True, color_error_palabra)
+            # Posición centrada y más abajo (ajusta el +40 si necesitas más/menos espacio)
+            x_pos = boton_aplicar.x + (boton_aplicar.width - texto_error.get_width()) // 2
+            y_pos = boton_aplicar.y + boton_aplicar.height + 40
+            ventana.blit(texto_error, (x_pos, y_pos))
+
         # dibujar palabra actual
         letras_renderizadas = [FUENTE.render(letra, True, NEGRO) for letra in seleccionados]
         anchos_letras = [texto.get_width() for texto in letras_renderizadas]
@@ -332,8 +353,7 @@ def main ():
         texto_puntos = FUENTE.render(f"Puntos:{puntaje_actual}/{puntaje_total} ({porcentaje}%)", True, NEGRO)
         ventana.blit(texto_puntos, (ANCHO - 420, ALTO - 30))  # Ajusta la posición si hace falta
 
-        # Mostrar mensajes
-
+        # Mostrar mensajes generales
         if mensaje_actual and pygame.time.get_ticks() - tiempo_mensaje_inicio < duracion_mensaje:
             texto = FUENTE.render(mensaje_actual, True, color_mensaje)
             ventana.blit(texto, (ANCHO // 2 - texto.get_width() // 2, 30))
@@ -343,18 +363,21 @@ def main ():
             if evento.type == pygame.QUIT:
                 run = False
             elif evento.type == pygame.MOUSEBUTTONDOWN:
-                    if boton_borrar_palabra.collidepoint(mx, my):
-                        seleccionados.clear()
-                    elif boton_borrar_letra.collidepoint(mx, my) and seleccionados:
-                        seleccionados.pop()
-                    elif boton_aplicar.collidepoint(mx, my):
-                        aplicar_palabra()
-                    elif boton_volver.collidepoint(mx, my):
-                        return
-                    else:
-                        for i, poligono in enumerate(hexagonos):
-                            if punto_en_poligono(mx, my, poligono):
-                                seleccionados.append(LETRAS[i])
+                if boton_borrar_palabra.collidepoint(mx, my):
+                    seleccionados.clear()
+                    mensaje_error_palabra = ""  # Limpiar mensaje de error al borrar
+                elif boton_borrar_letra.collidepoint(mx, my) and seleccionados:
+                    seleccionados.pop()
+                    mensaje_error_palabra = ""  # Limpiar mensaje de error al borrar
+                elif boton_aplicar.collidepoint(mx, my):
+                    aplicar_palabra()
+                elif boton_volver.collidepoint(mx, my):
+                    return
+                else:
+                    for i, poligono in enumerate(hexagonos):
+                        if punto_en_poligono(mx, my, poligono):
+                            seleccionados.append(LETRAS[i])
+                            mensaje_error_palabra = ""  # Limpiar mensaje de error al agregar letra
             elif evento.type == pygame.MOUSEWHEEL:
                 scroll_offset -= evento.y * 30
                 scroll_offset = max(0, scroll_offset)
@@ -376,5 +399,5 @@ def main ():
     pygame.display.set_caption("Palabrerío")
     return
 
-if __name__ == "_main_":
+if __name__ == "__main__":
     main()
