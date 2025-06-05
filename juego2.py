@@ -107,7 +107,12 @@ class Juego:
     def ejecutar_lexireto(self):
         """Ejecuta el juego Lexireto"""
         self.play = False  # Pausamos el menú principal
-        LEXIRETO.main(self.username)  # Ejecutamos Lexireto
+
+        # Cargar partida existente si existe
+        from guardado import cargar_partida
+        estado_partida = cargar_partida(self.username, "lexireto")
+
+        LEXIRETO.main(estado_partida)  # Ejecutamos Lexireto con el estado cargado
         self.play = True  # Volvemos al menú principal al terminar
         # Restablecemos la pantalla
         self.ventana = pygame.display.set_mode((self.Ancho, self.Largo))

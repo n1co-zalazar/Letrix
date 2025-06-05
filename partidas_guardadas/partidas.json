@@ -1,0 +1,109 @@
+{
+  "usuarios": {
+    "jugador": {
+      "partida_lexireto": {
+        "letras_panal": [
+          "S",
+          "I",
+          "L",
+          "O",
+          "N",
+          "E",
+          "M"
+        ],
+        "letra_central": "S",
+        "palabras_validas": [
+          "MISION",
+          "LESION",
+          "LOS",
+          "SEIS",
+          "NINOS",
+          "ESE",
+          "ESOS",
+          "MISMO",
+          "SOLO",
+          "LES",
+          "MISMOS",
+          "SOL",
+          "SOIS",
+          "LISO",
+          "MIOS",
+          "SENO",
+          "SIMIO",
+          "ELLOS",
+          "SOMOS",
+          "SINO",
+          "INMENSO",
+          "MESES",
+          "SOLOS",
+          "SESION",
+          "EMISION",
+          "SELLO",
+          "MIS",
+          "SOS",
+          "SIN",
+          "SON",
+          "MES",
+          "MILLONES",
+          "NOS",
+          "MISIL",
+          "OSO",
+          "MISILES",
+          "SIMON",
+          "MILES",
+          "MISS",
+          "MENOS",
+          "SILLON",
+          "ESO"
+        ],
+        "palabras_encontradas": {
+          "S": {
+            "palabras": [
+              "SOS"
+            ],
+            "contador": 0,
+            "total": 16
+          },
+          "I": {
+            "palabras": [],
+            "contador": 0,
+            "total": 1
+          },
+          "L": {
+            "palabras": [],
+            "contador": 0,
+            "total": 4
+          },
+          "O": {
+            "palabras": [],
+            "contador": 0,
+            "total": 1
+          },
+          "N": {
+            "palabras": [],
+            "contador": 0,
+            "total": 2
+          },
+          "E": {
+            "palabras": [],
+            "contador": 0,
+            "total": 5
+          },
+          "M": {
+            "palabras": [],
+            "contador": 0,
+            "total": 13
+          }
+        },
+        "palabras_encontradas_todas": [
+          "SOS"
+        ],
+        "lista_palabras_encontradas": [
+          "SOS"
+        ],
+        "puntaje": 1,
+        "tiempo_transcurrido": 14
+      }
+    }
+  }
+}

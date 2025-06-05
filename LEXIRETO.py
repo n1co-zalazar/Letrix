@@ -1,4 +1,3 @@
-
 import pygame
 import math
 import random
@@ -9,18 +8,12 @@ import json
 
 
 def cargar_partida(usuario):
-    try:
-        with open(f"partidas/{usuario}_save.json", "r") as f:
-            return json.load(f)
-    except FileNotFoundError:
-        return None
-
+    from guardado import cargar_partida as cp
+    return cp(usuario, "lexireto")  # "lexireto" como identificador del juego
 
 def guardar_partida(usuario, estado):
-    os.makedirs("partidas", exist_ok=True)
-    with open(f"partidas/{usuario}_save.json", "w") as f:
-        json.dump(estado, f)
-
+    from guardado import guardar_partida as gp
+    return gp(usuario, "lexireto", estado)
 
 def main(estado_partida=None):
     pygame.init()
