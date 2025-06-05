@@ -1,8 +1,8 @@
 import pygame
 import const2
 from boton import Boton
-import letrascasifinal
-import lexiretofinal
+import LETRAS
+import LEXIRETO
 import login
 import json
 import os
@@ -107,7 +107,7 @@ class Juego:
     def ejecutar_lexireto(self):
         """Ejecuta el juego Lexireto"""
         self.play = False  # Pausamos el menú principal
-        lexiretofinal.main(self.username)  # Ejecutamos Lexireto
+        LEXIRETO.main(self.username)  # Ejecutamos Lexireto
         self.play = True  # Volvemos al menú principal al terminar
         # Restablecemos la pantalla
         self.ventana = pygame.display.set_mode((self.Ancho, self.Largo))
@@ -115,7 +115,7 @@ class Juego:
     def ejecutar_letras(self):
         """Ejecuta el juego Letras"""
         self.play = False  # Pausamos el menú principal
-        letrascasifinal.jugar_sopa_letras(self.username)  # Ejecutamos Letras
+        LETRAS.jugar_sopa_letras(self.username)  # Ejecutamos Letras
         self.play = True  # Volvemos al menú principal al terminar
         # Restablecemos la pantalla
         self.ventana = pygame.display.set_mode((self.Ancho, self.Largo))
