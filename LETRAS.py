@@ -229,7 +229,7 @@ def jugar_sopa_letras(username=None, palabras=None, filas=7, columnas=7, tam_cel
         pygame.draw.rect(screen, color_menu, boton_menu)
         pygame.draw.rect(screen, negro, boton_menu, 2)
 
-        texto_menu = fuente.render("Pausa", True, negro)
+        texto_menu = fuente.render("Opciones", True, negro)
         screen.blit(texto_menu, (boton_menu.centerx - texto_menu.get_width() // 2,
                                  boton_menu.centery - texto_menu.get_height() // 2))
 
