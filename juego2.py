@@ -112,7 +112,9 @@ class Juego:
         from guardado import cargar_partida
         estado_partida = cargar_partida(self.username, "lexireto")
 
-        LEXIRETO.main(estado_partida)  # Ejecutamos Lexireto con el estado cargado
+        # Llamar a main solo una vez con el estado_partida
+        LEXIRETO.main(estado_partida, self.username)
+
         self.play = True  # Volvemos al menú principal al terminar
         # Restablecemos la pantalla
         self.ventana = pygame.display.set_mode((self.Ancho, self.Largo))

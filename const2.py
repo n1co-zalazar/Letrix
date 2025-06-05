@@ -11,6 +11,7 @@ azul = (0, 0, 255)
 color_opciones = (255, 81, 0)
 amarillo = (255,204,0)
 gris = (200,200,200)
+gris_oscuro = (100, 100, 100)
 naranja = (255,102,0)
 # tamaño letra
 tamano_letra_titulo = 40

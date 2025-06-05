@@ -3,106 +3,152 @@
     "jugador": {
       "partida_lexireto": {
         "letras_panal": [
-          "S",
-          "I",
+          "A",
+          "C",
           "L",
+          "R",
           "O",
-          "N",
           "E",
-          "M"
+          "D"
         ],
-        "letra_central": "S",
+        "letra_central": "A",
         "palabras_validas": [
-          "MISION",
-          "LESION",
-          "LOS",
-          "SEIS",
-          "NINOS",
-          "ESE",
-          "ESOS",
-          "MISMO",
-          "SOLO",
-          "LES",
-          "MISMOS",
-          "SOL",
-          "SOIS",
-          "LISO",
-          "MIOS",
-          "SENO",
-          "SIMIO",
-          "ELLOS",
-          "SOMOS",
-          "SINO",
-          "INMENSO",
-          "MESES",
-          "SOLOS",
-          "SESION",
-          "EMISION",
-          "SELLO",
-          "MIS",
-          "SOS",
-          "SIN",
-          "SON",
-          "MES",
-          "MILLONES",
-          "NOS",
-          "MISIL",
-          "OSO",
-          "MISILES",
-          "SIMON",
-          "MILES",
-          "MISS",
-          "MENOS",
-          "SILLON",
-          "ESO"
+          "CERCA",
+          "COCA",
+          "ALDEA",
+          "CAROL",
+          "ORCA",
+          "RECORDAR",
+          "CAE",
+          "CARCEL",
+          "ADORO",
+          "LLORAR",
+          "COLA",
+          "LOCAL",
+          "ACELERAR",
+          "RECADO",
+          "CERRAR",
+          "DOLAR",
+          "RODEAR",
+          "ALCALDE",
+          "ALREDEDOR",
+          "ORAL",
+          "ACERCA",
+          "DAR",
+          "ORADOR",
+          "CARACOL",
+          "COREA",
+          "AEREA",
+          "DARDO",
+          "RODAR",
+          "ORAR",
+          "CARRO",
+          "CALLA",
+          "OLA",
+          "DECADA",
+          "ACERCAR",
+          "DARA",
+          "ACORRALAR",
+          "ERA",
+          "OLLA",
+          "DALE",
+          "ERRAR",
+          "CARLA",
+          "CELDA",
+          "CAER",
+          "ALA",
+          "RADAR",
+          "RARA",
+          "LOCA",
+          "ARCA",
+          "EDAD",
+          "CERRADA",
+          "ACA",
+          "CARA",
+          "ROCA",
+          "ACERO",
+          "CARRERA",
+          "ARDER",
+          "OLEADA",
+          "DADO",
+          "ARCO",
+          "CREADO",
+          "ELLA",
+          "COLLAR",
+          "CADA",
+          "CREA",
+          "ACARREAR",
+          "CALOR",
+          "COLOCAR",
+          "ARAR",
+          "RARO",
+          "CERA",
+          "ACELERADO",
+          "AREA",
+          "AEREO",
+          "CLARO",
+          "CREAR",
+          "CALLADO",
+          "LADO",
+          "LEAL",
+          "DARLE",
+          "CARO",
+          "CERRADO",
+          "ACLARAR",
+          "ALLA",
+          "CLARA",
+          "REAL",
+          "CALLE",
+          "ADORAR",
+          "DARE"
         ],
         "palabras_encontradas": {
-          "S": {
-            "palabras": [
-              "SOS"
-            ],
-            "contador": 0,
-            "total": 16
-          },
-          "I": {
+          "A": {
             "palabras": [],
             "contador": 0,
-            "total": 1
+            "total": 23
+          },
+          "C": {
+            "palabras": [],
+            "contador": 0,
+            "total": 31
           },
           "L": {
             "palabras": [],
             "contador": 0,
-            "total": 4
+            "total": 5
+          },
+          "R": {
+            "palabras": [
+              "RODEAR"
+            ],
+            "contador": 0,
+            "total": 9
           },
           "O": {
             "palabras": [],
             "contador": 0,
-            "total": 1
-          },
-          "N": {
-            "palabras": [],
-            "contador": 0,
-            "total": 2
+            "total": 7
           },
           "E": {
             "palabras": [],
             "contador": 0,
-            "total": 5
+            "total": 4
           },
-          "M": {
+          "D": {
             "palabras": [],
             "contador": 0,
-            "total": 13
+            "total": 9
           }
         },
         "palabras_encontradas_todas": [
-          "SOS"
+          "RODEAR"
         ],
         "lista_palabras_encontradas": [
-          "SOS"
+          "RODEAR"
         ],
-        "puntaje": 1,
-        "tiempo_transcurrido": 14
+        "puntaje": 6,
+        "tiempo_transcurrido": 12
       }
     }
   }

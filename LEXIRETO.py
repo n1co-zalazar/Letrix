@@ -9,13 +9,89 @@ import json
 
 def cargar_partida(usuario):
     from guardado import cargar_partida as cp
-    return cp(usuario, "lexireto")  # "lexireto" como identificador del juego
+    partida = cp(usuario, "lexireto")
+    print(f"Intentando cargar partida para {usuario}: {partida}")  # Debug
+    return partida
 
 def guardar_partida(usuario, estado):
     from guardado import guardar_partida as gp
     return gp(usuario, "lexireto", estado)
 
-def main(estado_partida=None):
+mensaje_actual = ""
+color_mensaje = const2.negro
+tiempo_mensaje_inicio = 0
+
+def mostrar_mensaje(mensaje, color):
+    """Función independiente para mostrar mensajes"""
+    global mensaje_actual, color_mensaje, tiempo_mensaje_inicio
+    mensaje_actual = mensaje
+    color_mensaje = color
+    tiempo_mensaje_inicio = pygame.time.get_ticks()
+
+
+def mostrar_menu_inicial(username, ventana, ANCHO, ALTO, FUENTE, FUENTE_BOTON):
+    """Muestra el menú inicial con opciones de nueva partida o continuar"""
+    fondo = pygame.image.load("imágenes/fondo3.png").convert()
+    fondo = pygame.transform.scale(fondo, (ANCHO, ALTO))
+
+    # Verificar si hay partida guardada usando la función correcta
+    partida_guardada = None
+    if username:
+        from guardado import cargar_partida
+        partida_guardada = cargar_partida(username, "lexireto")
+
+    tiene_partida_guardada = partida_guardada is not None
+
+    # Crear botones
+    boton_nueva = pygame.Rect(ANCHO // 2 - 150, ALTO // 2 - 50, 300, 50)
+    boton_cargar = pygame.Rect(ANCHO // 2 - 150, ALTO // 2 + 30, 300, 50)
+
+    while True:
+        ventana.blit(fondo, (0, 0))
+
+        # Título
+        titulo = FUENTE.render("LEXIRETO", True, const2.negro)
+        ventana.blit(titulo, (ANCHO // 2 - titulo.get_width() // 2, ALTO // 3))
+
+        # Dibujar botones
+        mouse_pos = pygame.mouse.get_pos()
+
+        # Botón Nueva Partida
+        color_nueva = const2.azul if boton_nueva.collidepoint(mouse_pos) else const2.blanco
+        pygame.draw.rect(ventana, color_nueva, boton_nueva, border_radius=5)
+        pygame.draw.rect(ventana, const2.negro, boton_nueva, 2, border_radius=5)
+        texto_nueva = FUENTE_BOTON.render("Nueva Partida", True, const2.negro)
+        ventana.blit(texto_nueva, texto_nueva.get_rect(center=boton_nueva.center))
+
+        # Botón Continuar Partida - siempre visible pero con estado diferente
+        color_cargar = const2.azul if boton_cargar.collidepoint(mouse_pos) and tiene_partida_guardada else const2.gris
+        pygame.draw.rect(ventana, color_cargar, boton_cargar, border_radius=5)
+        pygame.draw.rect(ventana, const2.negro, boton_cargar, 2, border_radius=5)
+
+        # Texto siempre visible, pero con color diferente según el estado
+        texto_color = const2.negro if tiene_partida_guardada else const2.gris_oscuro
+        texto_cargar = FUENTE_BOTON.render("Continuar Partida", True, texto_color)
+        ventana.blit(texto_cargar, texto_cargar.get_rect(center=boton_cargar.center))
+
+        pygame.display.flip()
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                if boton_nueva.collidepoint(mouse_pos):
+                    return None  # Nueva partida
+                elif boton_cargar.collidepoint(mouse_pos):
+                    if tiene_partida_guardada:
+                        return partida_guardada  # Partida guardada
+                    else:
+                        mostrar_mensaje("No hay partida guardada", const2.rojo)
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    return "salir"
+
+def main(estado_partida=None, username=None):
     pygame.init()
     # Configuración inicial
     ANCHO = const2.width
@@ -39,6 +115,12 @@ def main(estado_partida=None):
     ventana = pygame.display.get_surface()
     if ventana is None:
         ventana = pygame.display.set_mode((ANCHO, ALTO))
+
+    # Mostrar menú inicial si no se proporciona estado_partida
+    if estado_partida is None and username:
+        estado_partida = mostrar_menu_inicial(username, ventana, ANCHO, ALTO, FUENTE, FUENTE_BOTON)
+        if estado_partida == "salir":
+            return
 
     fondo = pygame.image.load("imágenes/fondo3.png").convert()
     fondo = pygame.transform.scale(fondo, (ANCHO, ALTO))
