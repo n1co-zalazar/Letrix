@@ -93,6 +93,11 @@ def mostrar_menu_inicial(username, ventana, ANCHO, ALTO, FUENTE, FUENTE_BOTON):
 
 def main(estado_partida=None, username=None):
     pygame.init()
+    # Verificar que el sistema de guardado esté inicializado
+    from guardado import inicializar_sistema_guardado
+    if not inicializar_sistema_guardado():
+        print("Error: No se pudo inicializar el sistema de guardado")
+        return
     # Configuración inicial
     ANCHO = const2.width
     ALTO = const2.length
@@ -610,9 +615,10 @@ def main(estado_partida=None, username=None):
                         "puntaje": puntaje_actual,
                         "tiempo_transcurrido": (pygame.time.get_ticks() - tiempo_inicio) // 1000
                     }
-                    guardar_partida("jugador", estado)
-                    mostrar_mensaje("Partida guardada", VERDE)
-
+                    if guardar_partida(username, estado):  # Usa el username real
+                        mostrar_mensaje("Partida guardada", VERDE)
+                    else:
+                        mostrar_mensaje("Error al guardar", ROJO)
                 elif boton_volver.collidepoint(mx, my):
                     return
                 else:

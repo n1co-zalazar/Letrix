@@ -3,152 +3,232 @@
     "jugador": {
       "partida_lexireto": {
         "letras_panal": [
+          "M",
+          "S",
+          "I",
+          "R",
+          "T",
+          "E",
+          "O"
+        ],
+        "letra_central": "M",
+        "palabras_validas": [
+          "MORIREMOS",
+          "MESES",
+          "METER",
+          "METROS",
+          "MOTORES",
+          "METERTE",
+          "MISMO",
+          "SOMOS",
+          "IRME",
+          "MIS",
+          "SEREMOS",
+          "REMO",
+          "MIO",
+          "REMOTO",
+          "MES",
+          "RITMO",
+          "TEMOR",
+          "MITO",
+          "METIO",
+          "METI",
+          "MIRE",
+          "SIMIO",
+          "MISTERIO",
+          "METES",
+          "ESTEMOS",
+          "IREMOS",
+          "MISMOS",
+          "MISS",
+          "METE",
+          "TOMO",
+          "MORIR",
+          "MIOS",
+          "MORRO",
+          "TEMER",
+          "TEMO",
+          "OIRME",
+          "TOM",
+          "TIMO",
+          "METETE",
+          "TEME",
+          "METRO",
+          "OMITIR",
+          "MOTO",
+          "TOME",
+          "MIRO",
+          "MIRES",
+          "MOTOR"
+        ],
+        "palabras_encontradas": {
+          "M": {
+            "palabras": [],
+            "contador": 0,
+            "total": 28
+          },
+          "S": {
+            "palabras": [],
+            "contador": 0,
+            "total": 3
+          },
+          "I": {
+            "palabras": [],
+            "contador": 0,
+            "total": 2
+          },
+          "R": {
+            "palabras": [],
+            "contador": 0,
+            "total": 3
+          },
+          "T": {
+            "palabras": [
+              "TOMO"
+            ],
+            "contador": 0,
+            "total": 8
+          },
+          "E": {
+            "palabras": [],
+            "contador": 0,
+            "total": 1
+          },
+          "O": {
+            "palabras": [],
+            "contador": 0,
+            "total": 2
+          }
+        },
+        "palabras_encontradas_todas": [
+          "TOMO"
+        ],
+        "lista_palabras_encontradas": [
+          "TOMO"
+        ],
+        "puntaje": 2,
+        "tiempo_transcurrido": 5
+      }
+    },
+    "Nico": {
+      "partida_lexireto": {
+        "letras_panal": [
           "A",
           "C",
-          "L",
-          "R",
           "O",
-          "E",
-          "D"
+          "N",
+          "U",
+          "D",
+          "I"
         ],
         "letra_central": "A",
         "palabras_validas": [
-          "CERCA",
-          "COCA",
-          "ALDEA",
-          "CAROL",
-          "ORCA",
-          "RECORDAR",
-          "CAE",
-          "CARCEL",
-          "ADORO",
-          "LLORAR",
-          "COLA",
-          "LOCAL",
-          "ACELERAR",
-          "RECADO",
-          "CERRAR",
-          "DOLAR",
-          "RODEAR",
-          "ALCALDE",
-          "ALREDEDOR",
-          "ORAL",
-          "ACERCA",
-          "DAR",
-          "ORADOR",
-          "CARACOL",
-          "COREA",
-          "AEREA",
-          "DARDO",
-          "RODAR",
-          "ORAR",
-          "CARRO",
-          "CALLA",
-          "OLA",
-          "DECADA",
-          "ACERCAR",
-          "DARA",
-          "ACORRALAR",
-          "ERA",
-          "OLLA",
-          "DALE",
-          "ERRAR",
-          "CARLA",
-          "CELDA",
-          "CAER",
-          "ALA",
-          "RADAR",
-          "RARA",
-          "LOCA",
-          "ARCA",
-          "EDAD",
-          "CERRADA",
+          "CUANDO",
+          "NADA",
+          "COCAINA",
+          "ACIDO",
+          "DUDA",
+          "ANUNCIO",
+          "CANDADO",
+          "NACION",
+          "DANO",
+          "DIA",
           "ACA",
-          "CARA",
-          "ROCA",
-          "ACERO",
-          "CARRERA",
-          "ARDER",
-          "OLEADA",
+          "CANCION",
+          "CIUDAD",
+          "CUAN",
+          "UNA",
+          "NUNCA",
+          "CUIDADO",
           "DADO",
-          "ARCO",
-          "CREADO",
-          "ELLA",
-          "COLLAR",
+          "IDA",
+          "CAIDO",
+          "CONOCIA",
+          "ONDA",
+          "COCINA",
+          "ANO",
+          "NUCA",
+          "DAN",
+          "NACIDO",
+          "INDICA",
+          "UNICA",
+          "NACIO",
+          "NACI",
+          "CUIDANDO",
           "CADA",
-          "CREA",
-          "ACARREAR",
-          "CALOR",
-          "COLOCAR",
-          "ARAR",
-          "RARO",
-          "CERA",
-          "ACELERADO",
-          "AREA",
-          "AEREO",
-          "CLARO",
-          "CREAR",
-          "CALLADO",
-          "LADO",
-          "LEAL",
-          "DARLE",
-          "CARO",
-          "CERRADO",
-          "ACLARAR",
-          "ALLA",
-          "CLARA",
-          "REAL",
-          "CALLE",
-          "ADORAR",
-          "DARE"
+          "ANDA",
+          "CONOCIDA",
+          "NINA",
+          "CONDADO",
+          "ANNA",
+          "ANCIANO",
+          "ACCION",
+          "DANA",
+          "ODIA",
+          "AUDACIA",
+          "AUN",
+          "CAIDA",
+          "CANON",
+          "CUIDA",
+          "UNIDAD",
+          "ANDANDO",
+          "INDIA",
+          "CUNA",
+          "CIUDADANO",
+          "DANDO",
+          "COCA",
+          "DONNA"
         ],
         "palabras_encontradas": {
           "A": {
             "palabras": [],
             "contador": 0,
-            "total": 23
+            "total": 11
           },
           "C": {
             "palabras": [],
             "contador": 0,
-            "total": 31
-          },
-          "L": {
-            "palabras": [],
-            "contador": 0,
-            "total": 5
-          },
-          "R": {
-            "palabras": [
-              "RODEAR"
-            ],
-            "contador": 0,
-            "total": 9
+            "total": 20
           },
           "O": {
             "palabras": [],
             "contador": 0,
-            "total": 7
+            "total": 2
           },
-          "E": {
+          "N": {
             "palabras": [],
             "contador": 0,
-            "total": 4
+            "total": 8
+          },
+          "U": {
+            "palabras": [
+              "UNIDAD",
+              "UNICA"
+            ],
+            "contador": 0,
+            "total": 3
           },
           "D": {
             "palabras": [],
             "contador": 0,
-            "total": 9
+            "total": 8
+          },
+          "I": {
+            "palabras": [],
+            "contador": 0,
+            "total": 3
           }
         },
         "palabras_encontradas_todas": [
-          "RODEAR"
+          "UNICA",
+          "UNIDAD"
         ],
         "lista_palabras_encontradas": [
-          "RODEAR"
+          "UNIDAD",
+          "UNICA"
         ],
-        "puntaje": 6,
-        "tiempo_transcurrido": 12
+        "puntaje": 5,
+        "tiempo_transcurrido": 9
       }
     }
   }
