@@ -510,7 +510,7 @@ def main(estado_partida=None, username=None):
         boton_aplicar = dibujar_boton("Aplicar", x_aplicar, y_botones, ancho_boton, alto_boton, (mx, my))
         boton_borrar_letra = dibujar_boton("Borrar letra", x_borrar_letra, y_botones, ancho_boton, alto_boton, (mx, my))
         boton_volver = dibujar_boton("Volver", 30, 90, ancho_boton, alto_boton, (mx, my))
-        boton_pausa = dibujar_boton("Pausa", 30, 30, ancho_boton, alto_boton, (mx, my))
+        boton_pausa = dibujar_boton("Opciones", 30, 30, ancho_boton, alto_boton, (mx, my))
 
         boton_guardar = dibujar_boton("Guardar", ANCHO - 250, 30, ancho_boton, alto_boton, (mx, my))
         return boton_borrar_palabra, boton_aplicar, boton_borrar_letra, boton_volver, boton_pausa, boton_guardar
@@ -656,4 +656,3 @@ if __name__ == "__main__":
         estado_partida = cargar_partida(usuario)
 
     main(estado_partida)
-
