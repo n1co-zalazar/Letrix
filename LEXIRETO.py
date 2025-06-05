@@ -186,7 +186,8 @@ def main(estado_partida=None, username=None):
         LETRA_CENTRAL = estado_partida["letra_central"]
         palabras_validas = set(estado_partida.get("palabras_validas", []))
         puntaje_actual = estado_partida.get("puntaje", 0)
-        tiempo_inicio = pygame.time.get_ticks() - estado_partida.get("tiempo_transcurrido", 0) * 1000
+        tiempo_transcurrido_guardado = estado_partida.get("tiempo_transcurrido", 0)
+        tiempo_inicio = pygame.time.get_ticks() - (tiempo_transcurrido_guardado * 1000)
     else:
         LETRAS, LETRA_CENTRAL, palabras_validas = generar_letras_validas("diccionario_sin_acentos.txt")
         if not LETRAS:
@@ -194,6 +195,8 @@ def main(estado_partida=None, username=None):
             return
 
         tiempo_inicio = pygame.time.get_ticks()
+        puntaje_actual = 0
+
 
     # asegurar que la letra central este en la primera posicion
     if LETRA_CENTRAL in LETRAS:
@@ -299,7 +302,6 @@ def main(estado_partida=None, username=None):
 
     # Calcular el puntaje maximo posible
     puntaje_total = sum(calcular_puntos(p) for p in palabras_validas)
-    puntaje_actual = 0
 
     def aplicar_palabra():
         nonlocal mensaje_error_palabra, color_error_palabra
@@ -519,7 +521,6 @@ def main(estado_partida=None, username=None):
     distancia = radio * 2 * math.cos(math.radians(30)) + 3.5
     posiciones = obtener_posiciones_hexagonos(cx, cy, distancia)
     hexagonos = [obtener_puntos_hexagono(x, y, radio) for (x, y) in posiciones]
-    tiempo_inicio = pygame.time.get_ticks()
     run = True
 
     while run:
@@ -655,3 +656,4 @@ if __name__ == "__main__":
         estado_partida = cargar_partida(usuario)
 
     main(estado_partida)
+
