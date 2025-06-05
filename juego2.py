@@ -108,12 +108,8 @@ class Juego:
         """Ejecuta el juego Lexireto"""
         self.play = False  # Pausamos el menú principal
 
-        # Cargar partida existente si existe
-        from guardado import cargar_partida
-        estado_partida = cargar_partida(self.username, "lexireto")
-
-        # Llamar a main solo una vez con el estado_partida
-        LEXIRETO.main(estado_partida, self.username)
+        # Llamar a main
+        LEXIRETO.main(None, self.username)
 
         self.play = True  # Volvemos al menú principal al terminar
         # Restablecemos la pantalla

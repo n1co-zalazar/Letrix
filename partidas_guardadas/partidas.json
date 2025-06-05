@@ -113,122 +113,106 @@
     "Nico": {
       "partida_lexireto": {
         "letras_panal": [
-          "A",
-          "C",
-          "O",
-          "N",
-          "U",
           "D",
-          "I"
+          "V",
+          "I",
+          "R",
+          "A",
+          "O",
+          "L"
         ],
-        "letra_central": "A",
+        "letra_central": "D",
         "palabras_validas": [
-          "CUANDO",
-          "NADA",
-          "COCAINA",
-          "ACIDO",
-          "DUDA",
-          "ANUNCIO",
-          "CANDADO",
-          "NACION",
-          "DANO",
-          "DIA",
-          "ACA",
-          "CANCION",
-          "CIUDAD",
-          "CUAN",
-          "UNA",
-          "NUNCA",
-          "CUIDADO",
-          "DADO",
+          "RADIAR",
+          "DOLOR",
+          "OVALADO",
+          "OIDO",
+          "RODILLA",
+          "LORD",
+          "RODAR",
+          "VARIADO",
+          "IDO",
+          "DAR",
+          "OLVIDADO",
+          "DIRA",
           "IDA",
-          "CAIDO",
-          "CONOCIA",
-          "ONDA",
-          "COCINA",
-          "ANO",
-          "NUCA",
-          "DAN",
-          "NACIDO",
-          "INDICA",
-          "UNICA",
-          "NACIO",
-          "NACI",
-          "CUIDANDO",
-          "CADA",
-          "ANDA",
-          "CONOCIDA",
-          "NINA",
-          "CONDADO",
-          "ANNA",
-          "ANCIANO",
-          "ACCION",
-          "DANA",
+          "DIO",
+          "OLVIDO",
+          "DARA",
+          "ODIO",
+          "ODIAR",
+          "ADORO",
+          "ORADOR",
+          "RADIO",
+          "DADO",
+          "VIDA",
+          "OLVIDAR",
+          "VIDRIO",
+          "IDOLO",
+          "DIARIO",
+          "DILO",
+          "ARRODILLAR",
+          "VIVIDO",
+          "DARDO",
+          "OLVIDA",
+          "DARIA",
+          "ADORAR",
+          "DAVID",
+          "DIA",
           "ODIA",
-          "AUDACIA",
-          "AUN",
-          "CAIDA",
-          "CANON",
-          "CUIDA",
-          "UNIDAD",
-          "ANDANDO",
-          "INDIA",
-          "CUNA",
-          "CIUDADANO",
-          "DANDO",
-          "COCA",
-          "DONNA"
+          "OLVIDALO",
+          "DIRIA",
+          "DOLAR",
+          "LADO",
+          "RADAR"
         ],
         "palabras_encontradas": {
-          "A": {
-            "palabras": [],
-            "contador": 0,
-            "total": 11
-          },
-          "C": {
-            "palabras": [],
-            "contador": 0,
-            "total": 20
-          },
-          "O": {
-            "palabras": [],
-            "contador": 0,
-            "total": 2
-          },
-          "N": {
-            "palabras": [],
-            "contador": 0,
-            "total": 8
-          },
-          "U": {
-            "palabras": [
-              "UNIDAD",
-              "UNICA"
-            ],
-            "contador": 0,
-            "total": 3
-          },
           "D": {
             "palabras": [],
             "contador": 0,
-            "total": 8
+            "total": 14
+          },
+          "V": {
+            "palabras": [
+              "VIVIDO"
+            ],
+            "contador": 0,
+            "total": 4
           },
           "I": {
             "palabras": [],
             "contador": 0,
             "total": 3
+          },
+          "R": {
+            "palabras": [],
+            "contador": 0,
+            "total": 5
+          },
+          "A": {
+            "palabras": [],
+            "contador": 0,
+            "total": 3
+          },
+          "O": {
+            "palabras": [],
+            "contador": 0,
+            "total": 11
+          },
+          "L": {
+            "palabras": [],
+            "contador": 0,
+            "total": 2
           }
         },
         "palabras_encontradas_todas": [
-          "UNICA",
-          "UNIDAD"
+          "VIVIDO"
         ],
         "lista_palabras_encontradas": [
-          "UNIDAD",
-          "UNICA"
+          "VIVIDO"
         ],
-        "puntaje": 5,
-        "tiempo_transcurrido": 9
+        "puntaje": 6,
+        "tiempo_transcurrido": 17
       }
     }
   }

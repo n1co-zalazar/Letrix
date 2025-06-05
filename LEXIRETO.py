@@ -57,19 +57,19 @@ def mostrar_menu_inicial(username, ventana, ANCHO, ALTO, FUENTE, FUENTE_BOTON):
         mouse_pos = pygame.mouse.get_pos()
 
         # Botón Nueva Partida
-        color_nueva = const2.azul if boton_nueva.collidepoint(mouse_pos) else const2.blanco
+        color_nueva = const2.gris if boton_nueva.collidepoint(mouse_pos) else const2.blanco
         pygame.draw.rect(ventana, color_nueva, boton_nueva, border_radius=5)
         pygame.draw.rect(ventana, const2.negro, boton_nueva, 2, border_radius=5)
         texto_nueva = FUENTE_BOTON.render("Nueva Partida", True, const2.negro)
         ventana.blit(texto_nueva, texto_nueva.get_rect(center=boton_nueva.center))
 
         # Botón Continuar Partida - siempre visible pero con estado diferente
-        color_cargar = const2.azul if boton_cargar.collidepoint(mouse_pos) and tiene_partida_guardada else const2.gris
+        color_cargar = const2.gris if boton_cargar.collidepoint(mouse_pos) and tiene_partida_guardada else const2.blanco
         pygame.draw.rect(ventana, color_cargar, boton_cargar, border_radius=5)
         pygame.draw.rect(ventana, const2.negro, boton_cargar, 2, border_radius=5)
 
         # Texto siempre visible, pero con color diferente según el estado
-        texto_color = const2.negro if tiene_partida_guardada else const2.gris_oscuro
+        texto_color = const2.negro if tiene_partida_guardada else const2.gris
         texto_cargar = FUENTE_BOTON.render("Continuar Partida", True, texto_color)
         ventana.blit(texto_cargar, texto_cargar.get_rect(center=boton_cargar.center))
 
@@ -122,7 +122,7 @@ def main(estado_partida=None, username=None):
         ventana = pygame.display.set_mode((ANCHO, ALTO))
 
     # Mostrar menú inicial si no se proporciona estado_partida
-    if estado_partida is None and username:
+    if username:
         estado_partida = mostrar_menu_inicial(username, ventana, ANCHO, ALTO, FUENTE, FUENTE_BOTON)
         if estado_partida == "salir":
             return
